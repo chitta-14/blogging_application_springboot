@@ -5,14 +5,18 @@ import com.blog.blogging_application.entity.Post;
 import com.blog.blogging_application.entity.User;
 import com.blog.blogging_application.exception.ResourceNotFoundException;
 import com.blog.blogging_application.payload.ApiResponse;
-import com.blog.blogging_application.payload.CategoryDto;
 import com.blog.blogging_application.payload.PostDto;
+import com.blog.blogging_application.payload.PostResponse;
 import com.blog.blogging_application.repository.CategoryRepo;
 import com.blog.blogging_application.repository.PostRepo;
 import com.blog.blogging_application.repository.UserRepository;
 import com.blog.blogging_application.service.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -61,10 +65,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost() {
-        List<Post>postList=this.postRepo.findAll();
-        List<PostDto>postDtos=postList.stream().map((post)->this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
-        return postDtos;
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize,String sortBy,String sortDir) {
+        Sort sort=(sortDir.equalsIgnoreCase("asc"))?(Sort.by(sortBy).ascending()):(Sort.by(sortBy).descending());
+        PageRequest p= PageRequest.of(pageNumber,pageSize,sort);
+        Page<Post> pagePosts=this.postRepo.findAll(p);
+        List<Post> posts=pagePosts.getContent();
+        List<PostDto> postDtos =posts.stream().map((post)->this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
+
+        PostResponse postResponse=new PostResponse();
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(pagePosts.getNumber());
+        postResponse.setPageSize(pagePosts.getSize());
+        postResponse.setLastPage(pagePosts.isLast());
+        postResponse.setTotalPages(pagePosts.getTotalPages());
+        postResponse.setTotalNumberOfElementes(pagePosts.getNumberOfElements());
+        return postResponse;
     }
 
     @Override
@@ -90,6 +105,7 @@ public class PostServiceImpl implements PostService {
         Category category=this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","categoryId",categoryId));
         List<Post>postList=this.postRepo.findByCategory(category);
         List<PostDto>postDtos=postList.stream().map((post)->this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
+        System.out.println(postDtos);
         return postDtos;
     }
 }

@@ -1,7 +1,9 @@
 package com.blog.blogging_application.controller;
 
 import com.blog.blogging_application.payload.ApiResponse;
+import com.blog.blogging_application.payload.AppConstants;
 import com.blog.blogging_application.payload.PostDto;
+import com.blog.blogging_application.payload.PostResponse;
 import com.blog.blogging_application.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,8 +28,11 @@ public class PostController {
     }
     //get all user
     @GetMapping("/")
-    public ResponseEntity<List<PostDto>>getAllPost(){
-        return new ResponseEntity<List<PostDto>>(this.postService.getAllPost(),HttpStatus.OK);
+    public ResponseEntity<PostResponse>getAllPost(@RequestParam(value="pageNumber",defaultValue = "0",required = false)Integer pageNumber,
+                                                   @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGESIZE,required = false)Integer pageSize,
+                                                  @RequestParam(value = "sortBy",defaultValue = AppConstants.SORTBY,required = false)String sortBy,
+                                                  @RequestParam(value = "sortDir",defaultValue = AppConstants.SORTDIR,required = false)String sortDir){
+        return new ResponseEntity<PostResponse>(this.postService.getAllPost(pageNumber,pageSize,sortBy,sortDir),HttpStatus.OK);
     }
     //update user
     @PutMapping("/{postId}")
