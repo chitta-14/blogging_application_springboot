@@ -1,12 +1,12 @@
 package com.blog.blogging_application.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+
+import java.util.Date;
 
 @Entity
 @Getter
@@ -18,5 +18,12 @@ public class Post {
     private Integer postId;
     private String  title;
     private String  content;
+    private Date addDate;
+    private String image;
+    @ManyToOne
+    private User user;
+    @ManyToOne
+    private Category category;
+
 
 }
