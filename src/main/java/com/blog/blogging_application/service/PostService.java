@@ -16,4 +16,5 @@ public interface PostService {
     public ApiResponse deletePost(Integer postId);
     public List<PostDto>getPostByUser(Integer userId);
     public List<PostDto>getPostByCategory(Integer categoryId);
+    public List<PostDto>findByTitleContaining(String keyword);
 }

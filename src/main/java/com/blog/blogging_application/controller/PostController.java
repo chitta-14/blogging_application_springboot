@@ -52,4 +52,8 @@ public class PostController {
     public ResponseEntity<List<PostDto>>getPostByUser(@PathVariable Integer userId){
         return new ResponseEntity<List<PostDto>>(this.postService.getPostByUser(userId),HttpStatus.OK );
     }
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<PostDto>>search(@PathVariable("keyword")String keyword){
+        return new ResponseEntity<List<PostDto>>(this.postService.findByTitleContaining(keyword),HttpStatus.OK);
+    }
 }
