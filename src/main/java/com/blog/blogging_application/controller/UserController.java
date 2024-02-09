@@ -7,12 +7,15 @@ import com.blog.blogging_application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/user")
+@EnableMethodSecurity
 public class UserController {
     @Autowired
     private UserService userService;
@@ -41,4 +44,12 @@ public class UserController {
     public ResponseEntity<ApiResponse>deleteUser(@PathVariable("userId")Integer userId){
         return new ResponseEntity<ApiResponse>(this.userService.deleteUser(userId),HttpStatus.OK);
     }
+
+    //register api
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/register")
+    public ResponseEntity<UserDto>reqisterUser(@RequestBody UserDto userDto){
+        return new ResponseEntity<UserDto>(this.userService.registerUser(userDto), HttpStatus.CREATED);
+    }
+
 }

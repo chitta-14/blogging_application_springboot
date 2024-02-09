@@ -12,6 +12,5 @@ public interface UserService {
     public ApiResponse deleteUser(Integer userId);
     public List<UserDto>getAllUser();
     public User getUserById(Integer userId);
-
-
+    public UserDto registerUser(UserDto userDto);
 }
