@@ -27,8 +27,9 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private RoleRepo roleRepo;
     @Override
-    public User createUser(User user) {
-        return this.userRepository.save(user);
+    public UserDto createUser(UserDto user) {
+        User user1=this.userRepository.save(this.modelMapper.map(user,User.class));
+        return this.modelMapper.map(user1,UserDto.class);
     }
 
     @Override
@@ -62,9 +63,9 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public User getUserById(Integer userId) {
+    public UserDto getUserById(Integer userId) {
         User user=this.userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("user","userId",userId));
-        return user;
+        return this.modelMapper.map(user,UserDto.class);
     }
 
     @Override

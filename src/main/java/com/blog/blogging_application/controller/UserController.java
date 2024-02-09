@@ -21,13 +21,13 @@ public class UserController {
     private UserService userService;
     //create user
     @PostMapping("/")
-    public ResponseEntity<User>createUser(@RequestBody User user){
-        return new ResponseEntity<User>(this.userService.createUser(user), HttpStatus.CREATED);
+    public ResponseEntity<UserDto>createUser(@RequestBody UserDto user){
+        return new ResponseEntity<UserDto>(this.userService.createUser(user), HttpStatus.CREATED);
     }
     //getUserById
     @GetMapping("/{userId}")
-    public ResponseEntity<User>getUserById(@PathVariable("userId")Integer userId){
-        return new ResponseEntity<User>(this.userService.getUserById(userId),HttpStatus.OK );
+    public ResponseEntity<UserDto>getUserById(@PathVariable("userId")Integer userId){
+        return new ResponseEntity<UserDto>(this.userService.getUserById(userId),HttpStatus.OK );
     }
     //get all user
     @GetMapping("/")
